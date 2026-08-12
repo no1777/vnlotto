@@ -254,16 +254,27 @@ function renderI18n() {
             el.innerHTML = text;
         }
     });
-    // 更新页面标题
-    if (i18nData.app_title) {
-        document.title = i18nData.app_title.replace(/[🎰]\s*/, '').trim() || '六合彩 · 开发者平台';
-    }
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const text = i18nData[key];
+        if (text !== undefined) {
+            el.placeholder = text;
+        }
+    });
+
+    // ✅ 设置 HTML lang 属性
     const langMap = {
         'zh': 'zh-CN',
         'vi': 'vi',
         'en': 'en-US'
     };
     document.documentElement.lang = langMap[currentLang] || 'zh-CN';
+    
+    // 更新页面标题
+    if (i18nData.app_title) {
+        document.title = i18nData.app_title.replace(/[🎰]\s*/, '').trim() || '六合彩 · 开发者平台';
+    }
 }
 
 function updateLangButtons() {
