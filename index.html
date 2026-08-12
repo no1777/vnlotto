@@ -537,6 +537,151 @@ async function loadLogs() {
 }
 
 // ============================================================
+//  日志管理（分页 + 时间筛选 + 清理）
+// ============================================================
+let logCurrentPage = 1;
+let logLimit = 20;
+let logFilters = { start_date: '', end_date: '' };
+
+async function loadLogs() {
+    const container = document.getElementById('logsList');
+    const startDate = document.getElementById('logStartDate').value;
+    const endDate = document.getElementById('logEndDate').value;
+
+    // 构建查询参数
+    let url = `/api/auth/logs?page=${logCurrentPage}&limit=${logLimit}`;
+    if (startDate) url += `&start_date=${startDate}`;
+    if (endDate) url += `&end_date=${endDate}`;
+
+    try {
+        const data = await apiRequest(url);
+        if (data.success) {
+            const logs = data.data || [];
+            const pagination = data.pagination || { total: 0, totalPages: 1, page: 1 };
+
+            // 渲染日志列表
+            if (logs.length === 0) {
+                container.innerHTML = `<p class="text-muted" data-i18n="no_logs">暂无调用记录</p>`;
+                // 重新应用翻译
+                renderI18n();
+            } else {
+                container.innerHTML = logs.map(log => `
+                    <div class="log-item">
+                        <span>
+                            <span style="color:#ffd700;">${log.method || 'GET'}</span>
+                            ${log.endpoint || '/'}
+                            <span style="color:#667a88;font-size:0.75rem;margin-left:0.5rem;">${log.status_code || 200}</span>
+                        </span>
+                        <span class="time">${new Date(log.created_at).toLocaleString()}</span>
+                    </div>
+                `).join('');
+            }
+
+            // 更新分页信息
+            document.getElementById('logStart').textContent = pagination.total > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0;
+            document.getElementById('logEnd').textContent = Math.min(pagination.page * pagination.limit, pagination.total);
+            document.getElementById('logTotal').textContent = pagination.total;
+            document.getElementById('logPageInfo').textContent = `${pagination.page} / ${pagination.totalPages || 1}`;
+
+            document.getElementById('logPrevBtn').disabled = pagination.page <= 1;
+            document.getElementById('logNextBtn').disabled = pagination.page >= pagination.totalPages;
+
+            // 检查是否管理员（显示清理区域）
+            checkAdminAccess();
+        }
+    } catch (error) {
+        console.error('加载日志失败:', error);
+        container.innerHTML = '<p class="text-muted" data-i18n="loading_failed">加载失败</p>';
+        renderI18n();
+    }
+}
+
+// 检查管理员权限（显示清理区域）
+async function checkAdminAccess() {
+    try {
+        const data = await apiRequest('/api/auth/me');
+        if (data.success && data.user && data.user.role === 'admin') {
+            document.getElementById('logCleanupArea').style.display = 'block';
+        }
+    } catch (e) {
+        // 不是管理员
+    }
+}
+
+// ============================================================
+//  日志事件绑定
+// ============================================================
+document.getElementById('filterLogsBtn').addEventListener('click', () => {
+    logCurrentPage = 1;
+    loadLogs();
+});
+
+document.getElementById('resetLogFilterBtn').addEventListener('click', () => {
+    document.getElementById('logStartDate').value = '';
+    document.getElementById('logEndDate').value = '';
+    logCurrentPage = 1;
+    loadLogs();
+});
+
+document.getElementById('logPrevBtn').addEventListener('click', () => {
+    if (logCurrentPage > 1) {
+        logCurrentPage--;
+        loadLogs();
+    }
+});
+
+document.getElementById('logNextBtn').addEventListener('click', () => {
+    logCurrentPage++;
+    loadLogs();
+});
+
+document.getElementById('logLimit').addEventListener('change', function() {
+    logLimit = parseInt(this.value);
+    logCurrentPage = 1;
+    loadLogs();
+});
+
+// 清理日志
+document.getElementById('cleanupLogsBtn').addEventListener('click', async () => {
+    const days = parseInt(document.getElementById('cleanupDays').value);
+    const confirmMsg = i18nData.confirm_cleanup || `确定要删除 ${days} 天前的所有日志吗？此操作不可恢复！`;
+    if (!confirm(confirmMsg.replace('{days}', days))) return;
+
+    const resultEl = document.getElementById('cleanupResult');
+    resultEl.textContent = '⏳ 处理中...';
+    try {
+        const data = await apiRequest('/api/admin/logs/cleanup', {
+            method: 'POST',
+            body: JSON.stringify({ days })
+        });
+        if (data.success) {
+            resultEl.textContent = `✅ 已清理 ${data.deletedCount || 0} 条日志`;
+            setTimeout(() => resultEl.textContent = '', 5000);
+            loadLogs(); // 刷新列表
+        } else {
+            resultEl.textContent = '❌ ' + (data.message || '清理失败');
+        }
+    } catch (error) {
+        resultEl.textContent = '❌ 网络错误';
+    }
+});
+
+// 修改 Tab 切换事件，加载日志时带上筛选
+// 在原有的 tabs.forEach 中添加：
+tabs.forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+        switchTab(tabId);
+        if (tabId === 'tab-logs' && token) {
+            loadLogs(); // 现在支持分页
+        }
+        if (tabId === 'tab-dashboard' && token) {
+            loadDashboard();
+        }
+    });
+});
+    
+// ============================================================
 //  检查管理员权限（显示清理区域）
 // ============================================================
 async function checkAdminAccess() {
