@@ -48,6 +48,11 @@
         .mt-1 { margin-top: 0.5rem; }
         .text-muted { color: #667a88; font-size: 0.85rem; }
         .text-center { text-align: center; }
+
+        .lang-switch { display: flex; gap: 0.3rem; align-items: center; margin-left: auto; }
+        .lang-btn { background: transparent; border: 1px solid #3a4d5a; color: #b7b9b0; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        .lang-btn:hover { border-color: #ffd700; color: #ffd700; }
+        .lang-btn.active { background: rgba(255,215,0,0.2); border-color: #ffd700; color: #ffd700; }
     </style>
 </head>
 <body>
@@ -70,6 +75,12 @@
     </a>
     </div>
 
+    <div class="lang-switch">
+    <button class="lang-btn active" data-lang="zh">中</button>
+    <button class="lang-btn" data-lang="vi">Vi</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    
     <!-- Tab: 登录 -->
     <div id="tab-login" class="tab-content active">
         <form id="loginForm">
