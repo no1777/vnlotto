@@ -57,5 +57,8 @@
   "cleanup_btn": "Thực hiện dọn dẹp",
   "confirm_cleanup": "Bạn có chắc muốn xóa tất cả log trước {days} ngày? Hành động này không thể hoàn tác!",
   "cleanup_success": "✅ Đã dọn dẹp {count} log",
-  "logs_deleted": "Log đã bị xóa"
+  "logs_deleted": "Log đã bị xóa",
+  "clear": "Xóa",
+  "today": "Hôm nay",
+  "apply": "Áp dụng"
 }
