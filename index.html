@@ -135,9 +135,61 @@
     </div>
 
     <!-- Tab: 调用记录 -->
-    <div id="tab-logs" class="tab-content">
-        <div id="logsList"><p class="text-muted" data-i18n="no_logs">暂无调用记录</p></div>
+<div id="tab-logs" class="tab-content">
+    <!-- 筛选栏 -->
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem;align-items:center;">
+        <div class="form-group" style="margin:0;flex:1;min-width:120px;">
+            <label style="font-size:0.75rem;color:#b7b9b0;" data-i18n="start_date">开始日期</label>
+            <input type="date" id="logStartDate" style="width:100%;padding:0.4rem 0.8rem;border-radius:1rem;border:1px solid #445b6b;background:#1d2f3d;color:#f0e7d0;font-size:0.85rem;">
+        </div>
+        <div class="form-group" style="margin:0;flex:1;min-width:120px;">
+            <label style="font-size:0.75rem;color:#b7b9b0;" data-i18n="end_date">结束日期</label>
+            <input type="date" id="logEndDate" style="width:100%;padding:0.4rem 0.8rem;border-radius:1rem;border:1px solid #445b6b;background:#1d2f3d;color:#f0e7d0;font-size:0.85rem;">
+        </div>
+        <button id="filterLogsBtn" class="btn btn-primary btn-sm" style="margin-top:0.8rem;" data-i18n="filter">筛选</button>
+        <button id="resetLogFilterBtn" class="btn btn-secondary btn-sm" style="margin-top:0.8rem;" data-i18n="reset">重置</button>
     </div>
+
+    <!-- 日志列表 -->
+    <div id="logsList"><p class="text-muted" data-i18n="no_logs">暂无调用记录</p></div>
+
+    <!-- 分页 -->
+    <div id="logPagination" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;margin-top:1rem;padding-top:0.5rem;border-top:1px solid #2a3d4a;">
+        <div style="color:#667a88;font-size:0.8rem;">
+            <span data-i18n="showing">显示</span> <span id="logStart">0</span>-<span id="logEnd">0</span> / <span id="logTotal">0</span>
+        </div>
+        <div style="display:flex;gap:0.3rem;">
+            <button id="logPrevBtn" class="btn btn-secondary btn-sm" style="padding:0.2rem 0.8rem;min-width:auto;" data-i18n="prev">‹ 上一页</button>
+            <span id="logPageInfo" style="color:#b7b9b0;font-size:0.85rem;display:flex;align-items:center;padding:0 0.5rem;">1 / 1</span>
+            <button id="logNextBtn" class="btn btn-secondary btn-sm" style="padding:0.2rem 0.8rem;min-width:auto;" data-i18n="next">下一页 ›</button>
+        </div>
+        <div style="display:flex;gap:0.3rem;align-items:center;">
+            <span style="color:#667a88;font-size:0.75rem;" data-i18n="per_page">每页</span>
+            <select id="logLimit" style="padding:0.2rem 0.5rem;border-radius:1rem;border:1px solid #445b6b;background:#1d2f3d;color:#f0e7d0;font-size:0.8rem;">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 清理日志（仅管理员） -->
+    <div id="logCleanupArea" style="margin-top:1rem;padding-top:0.8rem;border-top:1px solid #2a3d4a;display:none;">
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;">
+            <span style="color:#667a88;font-size:0.8rem;" data-i18n="cleanup_label">🗑️ 清理日志：</span>
+            <select id="cleanupDays" style="padding:0.3rem 0.8rem;border-radius:1rem;border:1px solid #445b6b;background:#1d2f3d;color:#f0e7d0;font-size:0.85rem;">
+                <option value="7" data-i18n="cleanup_7">7天前</option>
+                <option value="30" data-i18n="cleanup_30">30天前</option>
+                <option value="90" data-i18n="cleanup_90">90天前</option>
+                <option value="180" data-i18n="cleanup_180">180天前</option>
+                <option value="365" data-i18n="cleanup_365">1年前</option>
+            </select>
+            <button id="cleanupLogsBtn" class="btn btn-danger btn-sm" data-i18n="cleanup_btn">执行清理</button>
+            <span id="cleanupResult" style="font-size:0.8rem;color:#ffd700;"></span>
+        </div>
+    </div>
+</div>
 </div>
 
 <script>
@@ -481,8 +533,27 @@ async function loadLogs() {
     } catch (err) {
         document.getElementById('logsList').innerHTML = '<p class="text-muted" data-i18n="loading_failed">加载失败</p>';
     }
+    checkAdminAccess();
 }
 
+// ============================================================
+//  检查管理员权限（显示清理区域）
+// ============================================================
+async function checkAdminAccess() {
+    try {
+        const data = await apiRequest('/api/auth/me');
+        if (data.success && data.user && data.user.role === 'admin') {
+            const cleanupArea = document.getElementById('logCleanupArea');
+            if (cleanupArea) {
+                cleanupArea.style.display = 'block';
+            }
+        }
+    } catch (e) {
+        // 不是管理员，不显示清理区域
+        console.log('非管理员用户');
+    }
+}
+    
 // ============================================================
 //  Tab 切换事件
 // ============================================================
