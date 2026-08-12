@@ -514,29 +514,6 @@ document.getElementById('revokeApiKeyBtn').addEventListener('click', async () =>
 });
 
 // ============================================================
-//  调用记录
-// ============================================================
-async function loadLogs() {
-    try {
-        const data = await apiRequest('/api/auth/logs');
-        const container = document.getElementById('logsList');
-        if (data.success && data.logs && data.logs.length > 0) {
-            container.innerHTML = data.logs.map(log => `
-                <div class="log-item">
-                    <span>${log.endpoint || '/'}</span>
-                    <span class="time">${new Date(log.created_at).toLocaleString()}</span>
-                </div>
-            `).join('');
-        } else {
-            container.innerHTML = '<p class="text-muted" data-i18n="no_logs">暂无调用记录</p>';
-        }
-    } catch (err) {
-        document.getElementById('logsList').innerHTML = '<p class="text-muted" data-i18n="loading_failed">加载失败</p>';
-    }
-    checkAdminAccess();
-}
-
-// ============================================================
 //  日志管理（分页 + 时间筛选 + 清理）
 // ============================================================
 let logCurrentPage = 1;
@@ -641,6 +618,18 @@ document.getElementById('logLimit').addEventListener('change', function() {
     loadLogs();
 });
 
+document.getElementById('filterLogsBtn').addEventListener('click', function() {
+    logCurrentPage = 1;
+    loadLogs();
+});
+
+document.getElementById('resetLogFilterBtn').addEventListener('click', function() {
+    document.getElementById('logStartDate').value = '';
+    document.getElementById('logEndDate').value = '';
+    logCurrentPage = 1;
+    loadLogs();
+});
+    
 // 清理日志
 document.getElementById('cleanupLogsBtn').addEventListener('click', async () => {
     const days = parseInt(document.getElementById('cleanupDays').value);
