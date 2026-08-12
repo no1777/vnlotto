@@ -57,5 +57,8 @@
   "cleanup_btn": "Execute Cleanup",
   "confirm_cleanup": "Are you sure you want to delete all logs older than {days} days? This action cannot be undone!",
   "cleanup_success": "✅ Cleaned up {count} logs",
-  "logs_deleted": "Logs deleted"
+  "logs_deleted": "Logs deleted",
+  "clear": "Clear",
+  "today": "Today",
+  "apply": "Apply"
 }
