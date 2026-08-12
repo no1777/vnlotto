@@ -57,19 +57,19 @@
 </head>
 <body>
 <div class="container">
-    <h1>🎰 六合彩 <span>开发者平台</span></h1>
+    <h1 data-i18n="app_title">🎰 六合彩 · 开发者平台</h1>
 
     <div id="msg" class="msg"></div>
 
     <!-- Tabs -->
     <div class="tabs" id="tabNav">
-        <button class="active" data-tab="tab-login">登录</button>
-        <button data-tab="tab-register">注册</button>
-        <button data-tab="tab-dashboard" id="dashboardTab" style="display:none;">我的API</button>
-        <button data-tab="tab-logs" id="logsTab" style="display:none;">调用记录</button>
-        <button id="logoutBtn" style="display:none; border-color:#ff6b6b; color:#ff6b6b;">退出</button>
+        <button class="active" data-tab="tab-login" data-i18n="login">登录</button>
+        <button data-tab="tab-register" data-i18n="register">注册</button>
+        <button data-tab="tab-dashboard" id="dashboardTab" style="display:none;" data-i18n="my_api">我的API</button>
+        <button data-tab="tab-logs" id="logsTab" style="display:none;" data-i18n="api_logs">调用记录</button>
+        <button id="logoutBtn" style="display:none; border-color:#ff6b6b; color:#ff6b6b;" data-i18n="logout">退出</button>
         <a href="/api-docs.html" target="_blank" style="text-decoration:none;">
-        <button style="padding:0.4rem 1.2rem; border-radius:2rem; border:1px solid #6b9fff; background:transparent; color:#6b9fff; cursor:pointer; transition:all 0.2s; font-size:0.9rem;">
+        <button style="padding:0.4rem 1.2rem; border-radius:2rem; border:1px solid #6b9fff; background:transparent; color:#6b9fff; cursor:pointer; transition:all 0.2s; font-size:0.9rem;" data-i18n="api_docs">
             📖 API文档
         </button>
     </a>
@@ -85,14 +85,14 @@
     <div id="tab-login" class="tab-content active">
         <form id="loginForm">
             <div class="form-group">
-                <label>邮箱</label>
+                <label data-i18n="email">邮箱</label>
                 <input type="email" id="loginEmail" placeholder="your@email.com" required>
             </div>
             <div class="form-group">
-                <label>密码</label>
+                <label data-i18n="password">密码</label>
                 <input type="password" id="loginPassword" placeholder="至少6位" minlength="6" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">登录</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="login_btn">登录</button>
         </form>
     </div>
 
@@ -100,15 +100,15 @@
     <div id="tab-register" class="tab-content">
         <form id="registerForm">
             <div class="form-group">
-                <label>邮箱</label>
+                <label data-i18n="email">邮箱</label>
                 <input type="email" id="registerEmail" placeholder="your@email.com" required>
             </div>
             <div class="form-group">
-                <label>密码</label>
+                <label data-i18n="password">密码</label>
                 <input type="password" id="registerPassword" placeholder="至少6位" minlength="6" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">注册并申请API密钥</button>
-            <p class="text-muted text-center mt-1">注册后需管理员审批方可使用</p>
+            <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="register_btn">注册并申请API密钥</button>
+            <p class="text-muted text-center mt-1" data-i18n="register_hint">注册后需管理员审批方可使用</p>
         </form>
     </div>
 
@@ -116,27 +116,27 @@
     <div id="tab-dashboard" class="tab-content">
         <div class="user-info" id="userInfo"></div>
         <hr class="divider">
-        <h3 style="color:#f6e9b0; font-size:1rem;">🔑 API密钥</h3>
+        <h3 style="color:#f6e9b0; font-size:1rem;" data-i18n="api_key_title">🔑 API密钥</h3>
         <div id="apiKeyInfo">
-            <p class="text-muted">暂无API密钥</p>
+            <p class="text-muted" data-i18n="no_api_key">暂无API密钥</p>
         </div>
         <div class="flex-row mt-1">
-            <button id="applyApiKeyBtn" class="btn btn-primary btn-sm">申请 API Key</button>
-            <button id="revokeApiKeyBtn" class="btn btn-danger btn-sm hidden">吊销</button>
+            <button id="applyApiKeyBtn" class="btn btn-primary btn-sm" data-i18n="apple_api_key">申请 API Key</button>
+            <button id="revokeApiKeyBtn" class="btn btn-danger btn-sm hidden" data-i18n="revoke_api_key">吊销</button>
         </div>
         <hr class="divider">
-        <p class="text-muted" style="font-size:0.8rem;">💡 API Key 需管理员激活后才能使用</p>
+        <p class="text-muted" style="font-size:0.8rem;" data-i18n="api_key_hint">💡 API Key 需管理员激活后才能使用</p>
     </div>
 
     <div class="text-center mt-1" style="border-top:1px solid #2a3d4a; padding-top:1rem;">
-    <a href="/api-docs.html" target="_blank" style="color:#6b9fff; text-decoration:none; font-size:0.9rem;">
+    <a href="/api-docs.html" target="_blank" style="color:#6b9fff; text-decoration:none; font-size:0.9rem;" data-i18n="view_api_docs">
         📖 查看 API 文档
     </a>
     </div>
 
     <!-- Tab: 调用记录 -->
     <div id="tab-logs" class="tab-content">
-        <div id="logsList"><p class="text-muted">暂无调用记录</p></div>
+        <div id="logsList"><p class="text-muted" data-i18n="no_logs">暂无调用记录</p></div>
     </div>
 </div>
 
@@ -192,10 +192,10 @@ function switchTab(tabId) {
 
 function getStatusBadge(status) {
     const map = {
-        'active': '<span class="status-badge status-active">已激活</span>',
-        'inactive': '<span class="status-badge status-inactive">未激活</span>',
-        'pending': '<span class="status-badge status-pending">待审批</span>',
-        'revoked': '<span class="status-badge status-revoked">已吊销</span>'
+        'active': '<span class="status-badge status-active" data-i18n="status_active">已激活</span>',
+        'inactive': '<span class="status-badge status-inactive" data-i18n="status_inactive">未激活</span>',
+        'pending': '<span class="status-badge status-pending" data-i18n="status_pending">待审批</span>',
+        'revoked': '<span class="status-badge status-revoked" data-i18n="status_revoked">已吊销</span>'
     };
     return map[status] || status;
 }
@@ -307,9 +307,9 @@ async function loadDashboard() {
 
 function renderUserInfo(user) {
     const statusMap = {
-        'pending': '<span class="status-badge status-pending">待审批</span>',
-        'active': '<span class="status-badge status-active">已激活</span>',
-        'banned': '<span class="status-badge status-revoked">已禁用</span>'
+        'pending': '<span class="status-badge status-pending" data-i18n="status_pending">待审批</span>',
+        'active': '<span class="status-badge status-active" data-i18n="status_active">已激活</span>',
+        'banned': '<span class="status-badge status-revoked" data-i18n="status_revoked">已禁用</span>'
     };
     document.getElementById('userInfo').innerHTML = `
         <p><strong>📧 邮箱：</strong>${user.email}</p>
@@ -331,21 +331,21 @@ function renderApiKey(apiKey) {
             const now = new Date();
             const isExpired = expiresAt < now;
             const color = isExpired ? '#ff6b6b' : '#6bda6b';
-            expiresHtml = `<p class="text-muted" style="font-size:0.8rem;">
+            expiresHtml = `<p class="text-muted" style="font-size:0.8rem;" data-i18n="expired_at">
                 到期时间：<span style="color:${color};font-weight:600;">
                     ${expiresAt.toLocaleString()}
                     ${isExpired ? ' ⚠️ 已过期' : ''}
                 </span>
             </p>`;
         } else {
-            expiresHtml = `<p class="text-muted" style="font-size:0.8rem;">到期时间：<span style="color:#ffd700;">永久有效</span></p>`;
+            expiresHtml = `<p class="text-muted" style="font-size:0.8rem;" data-i18n="expired_at">到期时间：<span style="color:#ffd700;" data-i18n="permanent">永久有效</span></p>`;
         }
 
         container.innerHTML = `
             <div class="key-box">${apiKey.api_key}</div>
             <p>状态：${getStatusBadge(apiKey.status)}</p>
             ${expiresHtml}
-            ${apiKey.last_used_at ? `<p class="text-muted" style="font-size:0.8rem;">最后使用：${new Date(apiKey.last_used_at).toLocaleString()}</p>` : ''}
+            ${apiKey.last_used_at ? `<p class="text-muted" style="font-size:0.8rem;" data-i18n="last_used">最后使用：${new Date(apiKey.last_used_at).toLocaleString()}</p>` : ''}
         `;
         applyBtn.classList.add('hidden');
         if (apiKey.status === 'active') {
@@ -354,7 +354,7 @@ function renderApiKey(apiKey) {
             revokeBtn.classList.add('hidden');
         }
     } else {
-        container.innerHTML = '<p class="text-muted">暂无API密钥，点击下方申请</p>';
+        container.innerHTML = '<p class="text-muted" data-i18n="no_api_key">暂无API密钥，点击下方申请</p>';
         applyBtn.classList.remove('hidden');
         revokeBtn.classList.add('hidden');
     }
@@ -406,10 +406,10 @@ async function loadLogs() {
                 </div>
             `).join('');
         } else {
-            container.innerHTML = '<p class="text-muted">暂无调用记录</p>';
+            container.innerHTML = '<p class="text-muted" data-i18n="no_logs">暂无调用记录</p>';
         }
     } catch (err) {
-        document.getElementById('logsList').innerHTML = '<p class="text-muted">加载失败</p>';
+        document.getElementById('logsList').innerHTML = '<p class="text-muted" data-i18n="loading_failed">加载失败</p>';
     }
 }
 
