@@ -473,8 +473,8 @@ function renderUserInfo(user) {
     };
     document.getElementById('userInfo').innerHTML = `
         <p><strong>📧 ${i18nData.email || '邮箱'}：</strong>${user.email}</p>
-        <p><strong> ${i18nData.user_status || '状态：'}</strong>${statusMap[user.status] || user.status}</p>
-        <p><strong> ${i18nData.register_time || '注册时间：'}</strong>${user.createdAt ? new Date(user.createdAt).toLocaleString() : '-'}</p>
+        <p><strong>📊 ${i18nData.user_status || '状态：'}</strong>${statusMap[user.status] || user.status}</p>
+        <p><strong>📅 ${i18nData.register_time || '注册时间：'}</strong>${user.createdAt ? new Date(user.createdAt).toLocaleString() : '-'}</p>
     `;
 }
 
